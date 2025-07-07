@@ -1,0 +1,15 @@
+=== RUN   TestAdd
+--- PASS: TestAdd (0.00s)
+=== RUN   TestSubtract
+--- PASS: TestSubtract (0.00s)
+=== RUN   TestMultiply
+--- FAIL: TestMultiply (0.00s)
+    math_test.go:23: expected 15, got 12
+=== RUN   TestDivide
+--- FAIL: TestDivide (0.00s)
+    math_test.go:31: expected 2, got 0
+=== RUN   TestModulo
+--- PASS: TestModulo (0.00s)
+FAIL
+exit status 1
+FAIL    example.com/math    0.005s
