@@ -1,15 +1,5 @@
 package logic
 
-// DoSomething does things
-func DoSomething(toDo string, num int32) {
-	switch toDo {
-	case "nil":
-		failOnNil()
-	case "returnVal":
-		_ = returnValue(num)
-	}
-}
-
 // failOnNil takes a pointer to int, tries to set it,
 // and returns the dereferenced value.
 // If you pass in nil, this will panic.
