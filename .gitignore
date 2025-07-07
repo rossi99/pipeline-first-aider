@@ -1,1 +1,5 @@
 .env
+
+logs/$log_type.log
+
+keys.txt

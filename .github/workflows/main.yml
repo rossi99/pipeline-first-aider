@@ -2,9 +2,9 @@ name: CI
 
 on:
   push:
-    branches: [main]
+    branches: [main, feat/comments]
   pull_request:
-    branches: [main]
+    branches: [main, feat/comments]
     types: [opened, synchronize, reopened]
 
 jobs:
@@ -21,7 +21,6 @@ jobs:
 
       # forms artefact from build that 'first aider' can download and use 
       - name: Run tests & capture logs
-        # TODO: Add for different test cases
         run: |
           go test ./... 2>&1 | tee build.log
 
@@ -31,13 +30,32 @@ jobs:
           name: build-logs     # arbitrary label
           path: build.log      # <-- this is mandatory
 
-  first-aider:
+  env-checker:
     needs: build
     runs-on: ubuntu-latest
+    environment: napier-hack
+    env:
+      CLAUDE_KEY: ${{ secrets.CLAUDE_KEY }}
+    steps:
+      - name: Debug CLAUDE_KEY injection
+        shell: bash
+        run: |
+          if [ -z "$CLAUDE_KEY" ]; then
+            echo "CLAUDE_KEY is missing"
+          else
+            echo "CLAUDE_KEY is present"
+          fi
+
+  first-aider:
+    needs: env-checker
+    runs-on: ubuntu-latest
+    environment: napier-hack
+    env:
+      CLAUDE_KEY: ${{ secrets.CLAUDE_KEY }}
     if: always()
     defaults:
       run:
-        working-directory: ./.github/actions/first-aider
+        working-directory: ./cmd
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -50,18 +68,15 @@ jobs:
 
       - name: Run First-Aider
         id: first_aider
-        uses: ./.github/actions/first-aider
+        uses: ./
         with:
           log-path: logs/build.log
-        env:
-          CLAUDE_TOKEN: ${{ secrets.CLAUDE_TOKEN }}
-          ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
-
+  
       - name: Post suggestion comment
         uses: actions/github-script@v7
         if: steps.first_aider.outputs.comment
         with:
-          github-token: ${{ secrets.ACCESS_TOKEN }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
             const body = process.env.COMMENT;
             github.issues.createComment({
