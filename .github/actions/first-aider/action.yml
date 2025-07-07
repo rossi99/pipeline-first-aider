@@ -1,0 +1,15 @@
+name: "First-Aider"
+description: "Diagnose CI failures using Claude and suggest fixes"
+inputs:
+  log-path:
+    description: "Path to the build log file"
+    required: true
+outputs:
+  comment:
+    description: "The comment to post on the PR"
+runs:
+  using: "docker"
+  image: "Dockerfile"
+  args:
+  - --log-path
+  - ${{ inputs.log-path }}

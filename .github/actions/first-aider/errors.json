@@ -1,0 +1,6 @@
+{
+  "ExampleError": {
+    "description": "An example error mapping",
+    "fix": "Example fix steps"
+  }
+}
