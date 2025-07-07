@@ -48,6 +48,7 @@ func main() {
 		fmt.Fprintf(os.Stderr, "Failed to read log file: %v\n", err)
 		os.Exit(1)
 	}
+
 	// Extract relevant snippet: last 100 lines
 	lines := strings.Split(string(rawLog), "\n")
 	snippet := ""
@@ -105,7 +106,7 @@ func connect(ctx context.Context, prompt string) ([]anthropic.ContentBlockUnion,
 	flag.Parse()
 
 	// Call Claude via Anthropic SDK
-	key := os.Getenv("CLAUDE_KEY")
+	key := os.Getenv("CLAUDE_TOKEN")
 	client := anthropic.NewClient(option.WithAPIKey(key))
 	respMsg, err := client.Messages.New(ctx, anthropic.MessageNewParams{
 		Model:     anthropic.ModelClaude4Opus20250514,
