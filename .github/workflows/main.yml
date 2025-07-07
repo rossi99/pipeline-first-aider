@@ -12,10 +12,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Set up Go
-        uses: actions/setup-go@v4
+        uses: actions/setup-go@v5
         with:
           go-version: '1.24.4' # go version used in dev
 
@@ -26,7 +26,18 @@ jobs:
           go test ./... 2>&1 | tee build.log
 
       - name: Upload build logs
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
+        with:
+          go-version: '1.24.4' # go version used in dev
+
+      # forms artefact from build that 'first aider' can download and use 
+      - name: Run tests & capture logs
+        # TODO: Add for different test cases
+        run: |
+          go test ./... 2>&1 | tee build.log
+
+      - name: Upload build logs
+        uses: actions/upload-artifact@v4
         with:
           name: build-logs
           path: build.log
@@ -40,10 +51,10 @@ jobs:
         working-directory: ./.github/actions/first-aider
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Download build logs
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: build-logs
           path: logs
