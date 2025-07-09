@@ -56,17 +56,21 @@ jobs:
           log-path: logs/build.log
   
       - name: Post suggestion comment
-        uses: actions/github-script@v7
-        if: steps.first_aider.outputs.comment
+        uses: KeisukeYamashita/create-comment@v1
         with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          script: |
-            const body = process.env.COMMENT;
-            github.issues.createComment({
-              issue_number: context.payload.pull_request.number,
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              body,
-            });
-        env:
-          COMMENT: ${{ steps.first_aider.outputs.comment }}
+          number:  1
+          comment: "Comment test"
+
+        # if: steps.first_aider.outputs.comment
+        # with:
+        #   github-token: ${{ secrets.GITHUB_TOKEN }}
+        #   script: |
+        #     const body = process.env.COMMENT;
+        #     github.issues.createComment({
+        #       issue_number: context.payload.pull_request.number,
+        #       owner: context.repo.owner,
+        #       repo: context.repo.repo,
+        #       body,
+        #     });
+        # env:
+        #   COMMENT: ${{ steps.first_aider.outputs.comment }}
