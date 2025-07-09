@@ -21,7 +21,8 @@ func Test_stringConcat(t *testing.T) {
 				str1: "",
 				str2: "World",
 			},
-			wantErr: errors.New("incorrect string"), // will fail on pipeline
+			// fixed wantErr to see congrats message
+			wantErr: errors.New("error: str1 cannot be empty"),
 		},
 		"success: missing string 2": {
 			args: args{

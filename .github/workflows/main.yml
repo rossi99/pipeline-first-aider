@@ -61,3 +61,4 @@ jobs:
         uses: mshick/add-pr-comment@v2
         with:
           message: ${{ steps.first_aider.outputs.comment }}
+          allow-repeats: true
