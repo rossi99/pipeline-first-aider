@@ -16,7 +16,7 @@ func Connect(ctx context.Context, prompt string) ([]anthropic.ContentBlockUnion,
 
 	// get key
 	claudeKey, keyFound := os.LookupEnv("CLAUDE_KEY")
-	if !keyFound {
+	if claudeKey == "" || !keyFound {
 		return nil, errors.New("error: found no key for Claude.")
 	}
 
