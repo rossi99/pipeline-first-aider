@@ -2,9 +2,9 @@ name: CI
 
 on:
   push:
-    branches: [main, feat/comments]
+    branches: [main]
   pull_request:
-    branches: [main, feat/comments]
+    branches: [main]
     types: [opened, synchronize, reopened]
 
 jobs:
@@ -60,5 +60,4 @@ jobs:
       - name: Post suggestion
         uses: mshick/add-pr-comment@v2
         with:
-          message: |
-            **Hello MAIN**
+          message: ${{ steps.first_aider.outputs.comment }}
