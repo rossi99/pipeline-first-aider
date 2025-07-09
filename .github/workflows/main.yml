@@ -17,11 +17,10 @@ jobs:
       - name: Set up Go
         uses: actions/setup-go@v5
         with:
-          go-version: '1.24.4' # go version used in dev
+          go-version: '1.24.4'
 
       # forms artefact from build that 'first aider' can download and use 
       - name: Run tests & capture logs
-        # TODO: Add for different test cases
         run: |
           go test ./... 2>&1 | tee build.log
 
@@ -34,10 +33,14 @@ jobs:
   first-aider:
     needs: build
     runs-on: ubuntu-latest
+    permissions:
+      pull-requests: write
+    env:
+      CLAUDE_KEY: ${{ secrets.CLAUDE_KEY }}
     if: always()
     defaults:
       run:
-        working-directory: ./.github/actions/first-aider
+        working-directory: ./cmd
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -50,25 +53,11 @@ jobs:
 
       - name: Run First-Aider
         id: first_aider
-        uses: ./.github/actions/first-aider
+        uses: ./
         with:
           log-path: logs/build.log
-        env:
-          CLAUDE_TOKEN: ${{ secrets.CLAUDE_TOKEN }}
-          ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
-
-      - name: Post suggestion comment
-        uses: actions/github-script@v7
-        if: steps.first_aider.outputs.comment
+  
+      - name: Post suggestion
+        uses: mshick/add-pr-comment@v2
         with:
-          github-token: ${{ secrets.ACCESS_TOKEN }}
-          script: |
-            const body = process.env.COMMENT;
-            github.issues.createComment({
-              issue_number: context.payload.pull_request.number,
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              body,
-            });
-        env:
-          COMMENT: ${{ steps.first_aider.outputs.comment }}
+          message: ${{ steps.first_aider.outputs.comment }}
