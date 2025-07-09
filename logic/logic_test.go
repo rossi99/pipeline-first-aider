@@ -21,7 +21,7 @@ func Test_stringConcat(t *testing.T) {
 				str1: "",
 				str2: "World",
 			},
-			// fixed wantErr to see congrats message
+			// fixed error
 			wantErr: errors.New("error: str1 cannot be empty"),
 		},
 		"success: missing string 2": {
