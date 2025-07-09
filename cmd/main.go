@@ -92,7 +92,7 @@ func main() {
 			os.Exit(1)
 		}
 		defer f.Close()
-		fmt.Fprintf(f, "comment=%s\n", suggestedAction)
+		fmt.Fprintf(f, "comment<<EOF\n%s\nEOF\n", suggestedAction)
 	} else {
 		fmt.Fprintln(os.Stderr, "GITHUB_OUTPUT environment variable is not set")
 		os.Exit(1)
