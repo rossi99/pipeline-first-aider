@@ -84,8 +84,19 @@ func main() {
 		suggestedAction = suggestion.Text
 	}
 
-	// Emit output for GitHub Action
-	fmt.Printf("::set-output name=comment::%s", suggestedAction)
+	// Emit output for GitHub Actions using the new file-based mechanism
+	if outFile, ok := os.LookupEnv("GITHUB_OUTPUT"); ok {
+		f, err := os.OpenFile(outFile, os.O_APPEND|os.O_WRONLY, 0644)
+		if err != nil {
+			fmt.Fprintf(os.Stderr, "Failed to open GITHUB_OUTPUT file: %v\n", err)
+			os.Exit(1)
+		}
+		defer f.Close()
+		fmt.Fprintf(f, "comment=%s\n", suggestedAction)
+	} else {
+		fmt.Fprintln(os.Stderr, "GITHUB_OUTPUT environment variable is not set")
+		os.Exit(1)
+	}
 }
 
 // getErrLines returns the last 100 lines of an error log
