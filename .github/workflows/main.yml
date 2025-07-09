@@ -17,7 +17,7 @@ jobs:
       - name: Set up Go
         uses: actions/setup-go@v5
         with:
-          go-version: '1.24.4' # go version used in dev
+          go-version: '1.24.4'
 
       # forms artefact from build that 'first aider' can download and use 
       - name: Run tests & capture logs
@@ -33,7 +33,6 @@ jobs:
   first-aider:
     needs: build
     runs-on: ubuntu-latest
-    environment: napier-hack
     env:
       CLAUDE_KEY: ${{ secrets.CLAUDE_KEY }}
     if: always()
