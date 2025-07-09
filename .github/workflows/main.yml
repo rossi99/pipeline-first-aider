@@ -55,22 +55,8 @@ jobs:
         with:
           log-path: logs/build.log
   
-      - name: Post suggestion comment
-        uses: KeisukeYamashita/create-comment@v1
+      - name: Post suggestion
+        uses: thollander/actions-comment-pull-request@v1
         with:
-          number:  1
-          comment: "Comment test"
-
-        # if: steps.first_aider.outputs.comment
-        # with:
-        #   github-token: ${{ secrets.GITHUB_TOKEN }}
-        #   script: |
-        #     const body = process.env.COMMENT;
-        #     github.issues.createComment({
-        #       issue_number: context.payload.pull_request.number,
-        #       owner: context.repo.owner,
-        #       repo: context.repo.repo,
-        #       body,
-        #     });
-        # env:
-        #   COMMENT: ${{ steps.first_aider.outputs.comment }}
+          message: 'test comment'
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
