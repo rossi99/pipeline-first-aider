@@ -13,3 +13,6 @@ runs:
   args:
   - --log-path
   - ${{ inputs.log-path }}
+  environment: napier-hack
+  env:
+    CLAUDE_KEY: ${{ secrets.CLAUDE_KEY }}

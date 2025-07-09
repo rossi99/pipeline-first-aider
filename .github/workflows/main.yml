@@ -30,24 +30,8 @@ jobs:
           name: build-logs     # arbitrary label
           path: build.log      # <-- this is mandatory
 
-  env-checker:
-    needs: build
-    runs-on: ubuntu-latest
-    environment: napier-hack
-    env:
-      CLAUDE_KEY: ${{ secrets.CLAUDE_KEY }}
-    steps:
-      - name: Debug CLAUDE_KEY injection
-        shell: bash
-        run: |
-          if [ -z "$CLAUDE_KEY" ]; then
-            echo "CLAUDE_KEY is missing"
-          else
-            echo "CLAUDE_KEY is present"
-          fi
-
   first-aider:
-    needs: env-checker
+    needs: build
     runs-on: ubuntu-latest
     environment: napier-hack
     env:
