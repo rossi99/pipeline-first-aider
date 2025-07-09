@@ -2,6 +2,7 @@ package ai
 
 import (
 	"context"
+	"errors"
 	"flag"
 	"fmt"
 	"os"
@@ -13,8 +14,14 @@ import (
 func Connect(ctx context.Context, prompt string) ([]anthropic.ContentBlockUnion, error) {
 	flag.Parse()
 
+	// get key
+	claudeKey, keyFound := os.LookupEnv("CLAUDE_KEY")
+	if !keyFound {
+		return nil, errors.New("error: found no key for Claude.")
+	}
+
 	// Call Claude via Anthropic SDK
-	client := anthropic.NewClient(option.WithAPIKey(os.Getenv("CLAUDE_KEY")))
+	client := anthropic.NewClient(option.WithAPIKey(claudeKey))
 	respMsg, err := client.Messages.New(ctx, anthropic.MessageNewParams{
 		Model:     anthropic.ModelClaude4Opus20250514,
 		MaxTokens: 500,
@@ -23,7 +30,7 @@ func Connect(ctx context.Context, prompt string) ([]anthropic.ContentBlockUnion,
 		},
 	})
 	if err != nil {
-		return nil, fmt.Errorf("Error calling Claude API: %w", err)
+		return nil, fmt.Errorf("error calling Claude API: %w", err)
 	}
 	suggestion := respMsg.Content
 	return suggestion, nil
